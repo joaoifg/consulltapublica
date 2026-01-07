@@ -12,6 +12,7 @@ import time
 
 from .core.config import settings
 from .api import identificacao, contribuicao, protocolo, publico
+from .api.admin import auth, users, moderacao, dashboard, consultas, participantes, logs
 
 # Rate limiter
 limiter = Limiter(key_func=get_remote_address)
@@ -76,11 +77,20 @@ async def log_requests(request: Request, call_next):
     return response
 
 
-# Rotas
+# Rotas públicas
 app.include_router(publico.router, prefix="/api/v1")
 app.include_router(identificacao.router, prefix="/api/v1")
 app.include_router(contribuicao.router, prefix="/api/v1")
 app.include_router(protocolo.router, prefix="/api/v1")
+
+# Rotas administrativas
+app.include_router(auth.router, prefix="/api/v1")
+app.include_router(users.router, prefix="/api/v1")
+app.include_router(moderacao.router, prefix="/api/v1")
+app.include_router(dashboard.router, prefix="/api/v1")
+app.include_router(consultas.router, prefix="/api/v1")
+app.include_router(participantes.router, prefix="/api/v1")
+app.include_router(logs.router, prefix="/api/v1")
 
 
 @app.get("/")

@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_, func
 from typing import List, Optional
 
-from ..models.contribuicao import Contribuicao, DocumentoConsulta
+from ..models.contribuicao import Contribuicao, DocumentoConsulta, StatusModeracao
 from ..models.participante import Participante
 from ..schemas.contribuicao import ContribuicaoCreate
 
@@ -40,7 +40,8 @@ async def criar_contribuicao(
         tipo=data.tipo,
         texto_proposto=data.texto_proposto,
         fundamentacao=data.fundamentacao,
-        publicada=True,
+        publicada=True,  # Mantido para backward compatibility
+        status_moderacao=StatusModeracao.PENDENTE,  # NOVO: Inicia como PENDENTE
         ip_origem=ip_origem,
         user_agent=user_agent
     )
@@ -102,7 +103,7 @@ async def listar_contribuicoes_publicas(
             Participante.uf
         )
         .join(Participante, Contribuicao.participante_id == Participante.id)
-        .where(Contribuicao.publicada == True)
+        .where(Contribuicao.status_moderacao == StatusModeracao.APROVADA)  # MODIFICADO: Apenas aprovadas
     )
 
     if documento:
@@ -152,7 +153,7 @@ async def contar_contribuicoes_publicas(
 ) -> int:
     """Conta total de contribuições públicas"""
     query = select(func.count(Contribuicao.id)).where(
-        Contribuicao.publicada == True
+        Contribuicao.status_moderacao == StatusModeracao.APROVADA  # MODIFICADO: Apenas aprovadas
     )
 
     if documento:

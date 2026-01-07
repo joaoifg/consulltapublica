@@ -4,7 +4,7 @@ Schemas Pydantic para Contribuição
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 from datetime import datetime
-from ..models.contribuicao import TipoContribuicao, DocumentoConsulta
+from ..models.contribuicao import TipoContribuicao, DocumentoConsulta, StatusModeracao
 from ..core.config import settings
 
 
@@ -54,6 +54,7 @@ class ContribuicaoResponse(BaseModel):
     tipo: str
     texto_proposto: str
     fundamentacao: str
+    status_moderacao: StatusModeracao  # NOVO: status de moderação
     criado_em: datetime
 
     class Config:
@@ -61,7 +62,7 @@ class ContribuicaoResponse(BaseModel):
 
 
 class ContribuicaoPublicaResponse(BaseModel):
-    """Schema para exibição pública de Contribuição"""
+    """Schema para exibição pública de Contribuição (apenas APROVADAS)"""
 
     id: int
     documento: str
@@ -72,6 +73,58 @@ class ContribuicaoPublicaResponse(BaseModel):
     nome_participante: str  # Nome público (sem CPF/CNPJ)
     uf: str
     criado_em: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ParticipanteDescriptografadoResponse(BaseModel):
+    """Schema de participante com dados descriptografados (apenas para admins)"""
+    id: int
+    tipo: str
+    nome_completo: Optional[str] = None
+    razao_social: Optional[str] = None
+    cpf: Optional[str] = None  # Descriptografado
+    cnpj: Optional[str] = None  # Descriptografado
+    email: str  # Descriptografado
+    uf: str
+    criado_em: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ContribuicaoAdminResponse(BaseModel):
+    """Schema de contribuição para administradores (inclui dados completos)"""
+    id: int
+    participante_id: int
+    documento: str
+    titulo_capitulo: str
+    secao: Optional[str]
+    artigo: str
+    paragrafo_inciso_alinea: Optional[str]
+    tipo: str
+    texto_proposto: str
+    fundamentacao: str
+    status_moderacao: StatusModeracao
+    moderado_por_id: Optional[int] = None
+    moderado_em: Optional[datetime] = None
+    motivo_rejeicao: Optional[str] = None
+    criado_em: datetime
+    ip_origem: Optional[str] = None
+    user_agent: Optional[str] = None
+
+    # Dados do participante (descriptografados)
+    participante: Optional[ParticipanteDescriptografadoResponse] = None
+
+    class Config:
+        from_attributes = True
+
+
+class ContribuicaoComModeracaoResponse(ContribuicaoAdminResponse):
+    """Schema de contribuição com informações do moderador"""
+    from .admin import AdminResponse
+    moderado_por: Optional[AdminResponse] = None
 
     class Config:
         from_attributes = True

@@ -22,6 +22,13 @@ class DocumentoConsulta(str, enum.Enum):
     CPEO = "CPEO"  # Código de Processo Ético Odontológico
 
 
+class StatusModeracao(str, enum.Enum):
+    """Status de moderação da contribuição"""
+    PENDENTE = "PENDENTE"    # Aguardando moderação
+    APROVADA = "APROVADA"    # Aprovada por admin
+    REJEITADA = "REJEITADA"  # Rejeitada por admin
+
+
 class Contribuicao(Base):
     """
     Tabela de contribuições
@@ -57,6 +64,12 @@ class Contribuicao(Base):
     # Transparência pública
     publicada = Column(Boolean, default=True, nullable=False, index=True)
 
+    # Moderação (novo sistema)
+    status_moderacao = Column(Enum(StatusModeracao), default=StatusModeracao.PENDENTE, nullable=False, index=True)
+    moderado_por_id = Column(Integer, ForeignKey("admins.id"), nullable=True, index=True)
+    moderado_em = Column(DateTime, nullable=True)
+    motivo_rejeicao = Column(Text, nullable=True)  # Obrigatório quando status=REJEITADA
+
     # Auditoria
     criado_em = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     atualizado_em = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -65,12 +78,16 @@ class Contribuicao(Base):
 
     # Relacionamentos
     participante = relationship("Participante", back_populates="contribuicoes")
+    moderado_por = relationship("Admin", back_populates="contribuicoes_moderadas", foreign_keys=[moderado_por_id])
+    historico_moderacao = relationship("HistoricoModeracao", back_populates="contribuicao")
 
     # Índices compostos
     __table_args__ = (
         Index('idx_contribuicao_doc_artigo', 'documento', 'artigo'),
         Index('idx_contribuicao_tipo_doc', 'tipo', 'documento'),
         Index('idx_contribuicao_publicada_criado', 'publicada', 'criado_em'),
+        Index('idx_contribuicao_status_moderacao', 'status_moderacao', 'criado_em'),
+        Index('idx_contribuicao_moderado_por', 'moderado_por_id', 'moderado_em'),
     )
 
     def __repr__(self):
