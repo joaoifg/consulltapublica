@@ -8,6 +8,7 @@ Create Date: 2026-01-07 06:37:53
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+from sqlalchemy import text
 from datetime import datetime
 
 # revision identifiers, used by Alembic.
@@ -17,24 +18,37 @@ branch_labels = None
 depends_on = None
 
 
+def enum_exists(enum_name: str, bind) -> bool:
+    """Verifica se um enum já existe no banco de dados"""
+    result = bind.execute(text(
+        "SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = :enum_name)"
+    ), {"enum_name": enum_name})
+    return result.scalar()
+
+
 def upgrade() -> None:
     # ### Criar Enum types ###
+    bind = op.get_bind()
 
     # Enum para roles de admin
-    admin_role_enum = postgresql.ENUM('SUPER_ADMIN', 'MODERADOR', 'ANALISTA', name='adminrole')
-    admin_role_enum.create(op.get_bind())
+    if not enum_exists('adminrole', bind):
+        bind.execute(text("CREATE TYPE adminrole AS ENUM ('SUPER_ADMIN', 'MODERADOR', 'ANALISTA')"))
+    admin_role_enum = postgresql.ENUM('SUPER_ADMIN', 'MODERADOR', 'ANALISTA', name='adminrole', create_type=False)
 
     # Enum para status de consulta
-    status_consulta_enum = postgresql.ENUM('RASCUNHO', 'ATIVA', 'ENCERRADA', name='statusconsulta')
-    status_consulta_enum.create(op.get_bind())
+    if not enum_exists('statusconsulta', bind):
+        bind.execute(text("CREATE TYPE statusconsulta AS ENUM ('RASCUNHO', 'ATIVA', 'ENCERRADA')"))
+    status_consulta_enum = postgresql.ENUM('RASCUNHO', 'ATIVA', 'ENCERRADA', name='statusconsulta', create_type=False)
 
     # Enum para ação de moderação
-    acao_moderacao_enum = postgresql.ENUM('APROVAR', 'REJEITAR', name='acaomoderacao')
-    acao_moderacao_enum.create(op.get_bind())
+    if not enum_exists('acaomoderacao', bind):
+        bind.execute(text("CREATE TYPE acaomoderacao AS ENUM ('APROVAR', 'REJEITAR')"))
+    acao_moderacao_enum = postgresql.ENUM('APROVAR', 'REJEITAR', name='acaomoderacao', create_type=False)
 
     # Enum para status de moderação
-    status_moderacao_enum = postgresql.ENUM('PENDENTE', 'APROVADA', 'REJEITADA', name='statusmoderacao')
-    status_moderacao_enum.create(op.get_bind())
+    if not enum_exists('statusmoderacao', bind):
+        bind.execute(text("CREATE TYPE statusmoderacao AS ENUM ('PENDENTE', 'APROVADA', 'REJEITADA')"))
+    status_moderacao_enum = postgresql.ENUM('PENDENTE', 'APROVADA', 'REJEITADA', name='statusmoderacao', create_type=False)
 
     # ### 1. Criar tabela admins ###
     op.create_table('admins',

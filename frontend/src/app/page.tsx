@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Documento } from '@/types'
 
 export default function Home() {
@@ -47,9 +48,14 @@ export default function Home() {
             <div className="flex items-center space-x-4">
               {/* Logo CFO */}
               <div className="flex items-center">
-                <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-cfo-900 font-bold text-xl">CFO</span>
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt="CFO Logo"
+                  width={80}
+                  height={80}
+                  className="object-contain"
+                  style={{ filter: 'brightness(0) invert(1)' }}
+                />
               </div>
               <div>
                 <h1 className="text-xl md:text-2xl font-bold">Conselho Federal de Odontologia</h1>
@@ -79,8 +85,8 @@ export default function Home() {
       <section className="relative bg-gradient-to-br from-cfo-900 via-cfo-800 to-cfo-900 text-white py-20 md:py-28 overflow-hidden">
         {/* Decorative Elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute top-0 left-0 w-70 h-70 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-70 h-70 bg-white rounded-full blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -453,21 +459,95 @@ export default function Home() {
               </button>
             </div>
 
-            {/* Aviso LGPD Moderno */}
-            <div className="mt-10 p-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-l-4 border-amber-500 rounded-xl shadow-lg">
-              <div className="flex items-start">
-                <div className="flex-shrink-0">
-                  <svg className="w-8 h-8 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
-                  </svg>
+            {/* Seção LGPD Moderna e Visual */}
+            <div className="mt-10 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-2xl shadow-xl border-2 border-blue-200 overflow-hidden">
+              <div className="p-8 md:p-10">
+                <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+                  {/* Ícone Principal - Escudo de Proteção */}
+                  <div className="flex-shrink-0">
+                    <div className="relative">
+                      <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg transform rotate-[-5deg] hover:rotate-0 transition-transform duration-300">
+                        <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-md">
+                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Conteúdo */}
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4">
+                      <h3 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
+                        <span className="text-3xl">🔒</span>
+                        Proteção de Dados
+                      </h3>
+                      <span className="px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+                        LGPD
+                      </span>
+                    </div>
+                    
+                    <div className="space-y-3 text-gray-700">
+                      <p className="text-base leading-relaxed">
+                        Seus dados estão <strong className="text-blue-700">protegidos e criptografados</strong> conforme a 
+                        <strong className="text-indigo-700"> Lei Geral de Proteção de Dados (LGPD)</strong>.
+                      </p>
+                      
+                      <div className="grid md:grid-cols-2 gap-4 mt-6">
+                        <div className="flex items-start gap-3 p-4 bg-white/60 rounded-xl backdrop-blur-sm">
+                          <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 text-sm mb-1">Contribuições Públicas</p>
+                            <p className="text-xs text-gray-600">Suas sugestões serão visíveis publicamente</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start gap-3 p-4 bg-white/60 rounded-xl backdrop-blur-sm">
+                          <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 text-sm mb-1">Dados Protegidos</p>
+                            <p className="text-xs text-gray-600">CPF, CNPJ e e-mail não serão divulgados</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="ml-4">
-                  <p className="text-base font-bold text-amber-900 mb-2">🔒 Proteção de Dados - LGPD</p>
-                  <p className="text-sm text-amber-800 leading-relaxed">
-                    Os dados fornecidos serão utilizados exclusivamente para esta consulta pública,
-                    conforme a <strong>Lei Geral de Proteção de Dados (LGPD)</strong>. Suas contribuições serão públicas,
-                    mas dados sensíveis como <strong>CPF, CNPJ e e-mail não serão divulgados</strong>.
-                  </p>
+              </div>
+              
+              {/* Barra Inferior com Badge de Conformidade */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-4 flex flex-wrap items-center justify-center gap-4 text-white text-sm">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span className="font-semibold">100% Conforme LGPD</span>
+                </div>
+                <span className="hidden md:inline">•</span>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"/>
+                  </svg>
+                  <span>Criptografia AES-256</span>
+                </div>
+                <span className="hidden md:inline">•</span>
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+                  </svg>
+                  <span>Uso exclusivo desta consulta</span>
                 </div>
               </div>
             </div>
@@ -515,7 +595,7 @@ export default function Home() {
       </main>
 
       {/* Footer Moderno */}
-      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-12 mt-20 border-t-4 border-cfo-600">
+      <footer className="bg-gradient-to-br from-cfo-900 via-cfo-800 to-cfo-900 text-white py-12 mt-20 border-t-4 border-cfo-600">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-3 gap-10 mb-8">
             <div>
@@ -525,14 +605,14 @@ export default function Home() {
                 </div>
                 Conselho Federal de Odontologia
               </h3>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-cfo-100 text-sm leading-relaxed">
                 Autarquia federal que regulamenta e fiscaliza o exercício da odontologia no Brasil,
                 promovendo a ética e a qualidade dos serviços odontológicos.
               </p>
             </div>
             <div>
               <h3 className="font-bold text-lg mb-4">Contato</h3>
-              <ul className="text-gray-300 text-sm space-y-3">
+              <ul className="text-cfo-100 text-sm space-y-3">
                 <li className="flex items-center">
                   <svg className="w-5 h-5 mr-3 text-cfo-400" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
@@ -556,7 +636,7 @@ export default function Home() {
             </div>
             <div>
               <h3 className="font-bold text-lg mb-4">Transparência</h3>
-              <ul className="text-gray-300 text-sm space-y-3">
+              <ul className="text-cfo-100 text-sm space-y-3">
                 <li>
                   <Link href="/contribuicoes" className="hover:text-white flex items-center">
                     <svg className="w-5 h-5 mr-3 text-cfo-400" fill="currentColor" viewBox="0 0 20 20">
@@ -577,11 +657,11 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-700 pt-8 text-center">
-            <p className="text-sm text-gray-400 mb-2">
+          <div className="border-t border-cfo-700 pt-8 text-center">
+            <p className="text-sm text-cfo-100 mb-2">
               © {new Date().getFullYear()} Conselho Federal de Odontologia - Todos os direitos reservados
             </p>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-cfo-200">
               Sistema desenvolvido em conformidade com a LGPD e Lei de Acesso à Informação
             </p>
           </div>

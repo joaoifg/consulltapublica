@@ -6,6 +6,7 @@ from typing import Optional
 from datetime import datetime
 from ..models.contribuicao import TipoContribuicao, DocumentoConsulta, StatusModeracao
 from ..core.config import settings
+from .admin import AdminResponse
 
 
 class ContribuicaoCreate(BaseModel):
@@ -123,7 +124,6 @@ class ContribuicaoAdminResponse(BaseModel):
 
 class ContribuicaoComModeracaoResponse(ContribuicaoAdminResponse):
     """Schema de contribuição com informações do moderador"""
-    from .admin import AdminResponse
     moderado_por: Optional[AdminResponse] = None
 
     class Config:

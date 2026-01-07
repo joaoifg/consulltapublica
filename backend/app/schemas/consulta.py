@@ -6,6 +6,7 @@ from typing import Optional, List
 from datetime import datetime
 from ..models.consulta import StatusConsulta
 from ..models.contribuicao import DocumentoConsulta
+from .admin import AdminResponse
 
 
 class ConsultaCreate(BaseModel):
@@ -92,7 +93,6 @@ class ConsultaResponse(BaseModel):
 
 class ConsultaComAdminResponse(ConsultaResponse):
     """Schema de resposta de consulta com dados do admin criador"""
-    from .admin import AdminResponse
     criado_por: Optional[AdminResponse] = None
 
     class Config:

@@ -101,17 +101,16 @@ export default function MinutaPage() {
               <iframe
                 src={doc.arquivo}
                 className="w-full h-full"
-                style={{ minHeight: '600px' }}
+                style={{ minHeight: '600px', border: 'none' }}
                 title={`Visualização da minuta - ${doc.nome}`}
-              >
-                <p className="p-4 text-gray-600">
-                  Seu navegador não suporta visualização de PDFs. 
-                  <a href={doc.arquivo} download className="text-cfo-600 underline ml-1">
-                    Clique aqui para baixar o arquivo
-                  </a>
-                </p>
-              </iframe>
+              />
             </div>
+            <p className="mt-2 text-sm text-gray-600 text-center">
+              Seu navegador não suporta visualização de PDFs?{' '}
+              <a href={doc.arquivo} download className="text-cfo-600 underline hover:text-cfo-700">
+                Clique aqui para baixar o arquivo
+              </a>
+            </p>
           </div>
 
           {/* Aviso */}

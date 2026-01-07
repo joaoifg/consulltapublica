@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { adminApi } from '@/services/adminApi';
 import { DashboardCard } from '@/components/admin/DashboardCard';
@@ -12,6 +12,14 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Estatisticas | null>(null);
   const [recentContributions, setRecentContributions] = useState<ContribuicaoResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Garante que recentContributions seja sempre um array (recalcula quando o estado muda)
+  const safeContributions = useMemo(() => {
+    if (Array.isArray(recentContributions)) {
+      return recentContributions;
+    }
+    return [];
+  }, [recentContributions]);
 
   useEffect(() => {
     loadDashboardData();
@@ -25,9 +33,22 @@ export default function DashboardPage() {
         adminApi.dashboard.obterContribuicoesRecentes(10),
       ]);
       setStats(statsData);
-      setRecentContributions(recentData);
+      
+      // O backend retorna {contribuicoes: [...]}, então extraímos o array
+      let contribuicoes: ContribuicaoResponse[] = [];
+      if (recentData) {
+        if (Array.isArray(recentData)) {
+          contribuicoes = recentData;
+        } else if (recentData.contribuicoes && Array.isArray(recentData.contribuicoes)) {
+          contribuicoes = recentData.contribuicoes;
+        } else if (Array.isArray(recentData.data)) {
+          contribuicoes = recentData.data;
+        }
+      }
+      setRecentContributions(contribuicoes);
     } catch (error) {
       console.error('Erro ao carregar dashboard:', error);
+      setRecentContributions([]);
     } finally {
       setIsLoading(false);
     }
@@ -163,14 +184,14 @@ export default function DashboardPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {recentContributions.length === 0 ? (
+              {!safeContributions || safeContributions.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                     Nenhuma contribuição encontrada
                   </td>
                 </tr>
               ) : (
-                recentContributions.map((contrib) => (
+                (Array.isArray(safeContributions) ? safeContributions : []).map((contrib) => (
                   <tr key={contrib.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 text-sm font-medium text-gray-900">
                       {contrib.protocolo}

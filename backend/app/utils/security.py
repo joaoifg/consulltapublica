@@ -116,7 +116,15 @@ def verificar_senha(senha_plana: str, senha_hash: str) -> bool:
     Returns:
         True se a senha está correta
     """
-    return pwd_context.verify(senha_plana, senha_hash)
+    try:
+        return pwd_context.verify(senha_plana, senha_hash)
+    except Exception:
+        # Fallback para bcrypt direto se passlib falhar
+        import bcrypt
+        try:
+            return bcrypt.checkpw(senha_plana.encode('utf-8'), senha_hash.encode('utf-8'))
+        except Exception:
+            return False
 
 
 def gerar_token_sessao(participante_id: int, tipo: str) -> str:

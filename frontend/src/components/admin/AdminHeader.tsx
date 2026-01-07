@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { Badge } from './Badge';
 
@@ -21,7 +22,17 @@ export function AdminHeader() {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Image
+              src="/logo.png"
+              alt="CFO Logo"
+              width={50}
+              height={50}
+              className="object-contain"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
+          </div>
           <h2 className="text-lg font-semibold text-gray-900">Painel Administrativo</h2>
         </div>
 

@@ -192,3 +192,6 @@ O sistema está **100% funcional** e pronto para uso! 🎉
 
 Basta executar `start-local.bat` (Windows) ou `./start-local.sh` (Linux/Mac) e acessar http://localhost:3000
 
+
+
+

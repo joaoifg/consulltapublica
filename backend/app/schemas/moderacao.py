@@ -6,6 +6,7 @@ from typing import Optional, List
 from datetime import datetime
 from ..models.historico_moderacao import AcaoModeracao
 from ..models.contribuicao import StatusModeracao
+from .admin import AdminResponse
 
 
 class ModeracaoAprovar(BaseModel):
@@ -76,7 +77,6 @@ class HistoricoModeracaoResponse(BaseModel):
 
 class HistoricoModeracaoComAdminResponse(HistoricoModeracaoResponse):
     """Schema de resposta com dados do admin"""
-    from .admin import AdminResponse
     admin: Optional[AdminResponse] = None
 
     class Config:

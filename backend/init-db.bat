@@ -14,3 +14,6 @@ alembic upgrade head
 echo Banco de dados inicializado com sucesso!
 pause
 
+
+
+

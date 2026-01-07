@@ -78,3 +78,6 @@ frontend/public/minutas/
 - Se o PDF não abrir no iframe, o usuário pode baixar o arquivo
 - Os arquivos ficam na pasta `public`, então são servidos estaticamente pelo Next.js
 
+
+
+

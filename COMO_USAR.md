@@ -208,3 +208,6 @@ curl http://localhost:8000/api/v1/publico/contribuicoes
 
 O sistema está configurado e pronto para receber contribuições! 🎉
 
+
+
+

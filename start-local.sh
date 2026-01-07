@@ -44,3 +44,6 @@ echo "Para parar o sistema:"
 echo "  docker-compose down"
 echo ""
 
+
+
+

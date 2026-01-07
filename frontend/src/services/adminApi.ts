@@ -289,6 +289,38 @@ export const adminApi = {
     },
   },
 
+  // ===== CONTRIBUIÇÕES =====
+
+  contribuicoes: {
+    listar: async (params?: {
+      status_moderacao?: string;
+      documento?: string;
+      tipo?: string;
+      skip?: number;
+      limit?: number;
+    }) => {
+      const response = await api.get('/admin/contribuicoes', { params });
+      return response.data;
+    },
+
+    obter: async (id: number): Promise<ContribuicaoAdmin> => {
+      const response = await api.get(`/admin/contribuicoes/${id}`);
+      return response.data;
+    },
+
+    exportarCsv: async (params?: {
+      status_moderacao?: string;
+      documento?: string;
+      tipo?: string;
+    }) => {
+      const response = await api.get('/admin/contribuicoes/exportar/csv', {
+        params,
+        responseType: 'blob',
+      });
+      return response.data;
+    },
+  },
+
   // ===== LOGS =====
 
   logs: {

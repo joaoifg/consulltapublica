@@ -26,10 +26,10 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cfo-blue-50 to-cfo-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-cfo-blue-600 mb-2">CFO Admin</h1>
+          <h1 className="text-3xl font-bold text-cfo-900 mb-2">CFO Admin</h1>
           <p className="text-gray-600">Painel Administrativo</p>
         </div>
 
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cfo-blue-500 focus:border-transparent transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cfo-900 focus:border-transparent transition-colors"
               placeholder="admin@cfo.org.br"
               disabled={isLoading}
             />
@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cfo-blue-500 focus:border-transparent transition-colors"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-cfo-900 focus:border-transparent transition-colors"
               placeholder="••••••••"
               disabled={isLoading}
             />
@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-cfo-blue-600 text-white py-3 rounded-md font-medium hover:bg-cfo-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            className="w-full bg-cfo-900 text-white py-3 rounded-md font-medium hover:bg-cfo-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Entrando...' : 'Entrar'}
           </button>

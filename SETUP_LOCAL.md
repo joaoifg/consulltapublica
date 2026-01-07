@@ -226,3 +226,6 @@ Para problemas ou dúvidas, consulte:
 - `QUICK_START.md` - Guia rápido
 - `docs/` - Documentação detalhada
 
+
+
+

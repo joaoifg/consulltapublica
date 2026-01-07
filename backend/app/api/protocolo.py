@@ -4,15 +4,18 @@ Endpoints de Protocolo
 from fastapi import APIRouter, Depends, HTTPException, Header, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
+import logging
 
 from ..core.database import get_db
 from ..schemas.protocolo import ProtocoloResponse, ProtocoloCompletoResponse
 from ..schemas.contribuicao import ContribuicaoResponse
 from ..services import protocolo_service, contribuicao_service, participante_service
+from ..services.email_service import email_service
 from ..utils.security import verificar_token_sessao
 from ..models.contribuicao import DocumentoConsulta
 
 router = APIRouter(prefix="/protocolos", tags=["Protocolos"])
+logger = logging.getLogger(__name__)
 
 
 async def obter_participante_da_sessao(
@@ -81,9 +84,52 @@ async def finalizar_contribuicoes(
     protocolo = await protocolo_service.criar_protocolo(
         db, participante_id, documento, contribuicoes_ids, ip_origem, user_agent
     )
+    
+    # Commit do protocolo
+    await db.commit()
+    await db.refresh(protocolo)
 
     # Busca participante para resposta
     participante = await participante_service.buscar_participante_por_id(db, participante_id)
+
+    # Prepara dados para email
+    contribuicoes_dict = [
+        {
+            "id": c.id,
+            "artigo": c.artigo or "",
+            "tipo": c.tipo.value if hasattr(c.tipo, 'value') else str(c.tipo),
+            "texto_proposto": c.texto_proposto or "",
+            "fundamentacao": c.fundamentacao or ""
+        }
+        for c in contribuicoes
+    ]
+
+    # Envia email de confirmação (em background, não bloqueia resposta)
+    try:
+        email_enviado = await email_service.enviar_email_protocolo(
+            email_criptografado=participante.email_criptografado,
+            numero_protocolo=protocolo.numero_protocolo,
+            documento=protocolo.documento,
+            nome_participante=participante.nome_publico,
+            total_contribuicoes=protocolo.total_contribuicoes,
+            data_submissao=protocolo.criado_em_brasilia,
+            contribuicoes=contribuicoes_dict,
+            public_url=None  # Será usado o PUBLIC_URL do settings
+        )
+
+        if email_enviado:
+            # Marca email como enviado
+            await protocolo_service.marcar_email_enviado(db, protocolo.id)
+            await db.commit()
+            logger.info(f"Email de protocolo {protocolo.numero_protocolo} enviado com sucesso")
+        else:
+            logger.warning(f"Falha ao enviar email para protocolo {protocolo.numero_protocolo}")
+    except Exception as e:
+        # Não falha a requisição se o email falhar, apenas loga o erro
+        logger.error(f"Erro ao enviar email de protocolo {protocolo.numero_protocolo}: {str(e)}", exc_info=True)
+    except Exception as e:
+        # Não falha a requisição se o email falhar, apenas loga o erro
+        logger.error(f"Erro ao enviar email de protocolo {protocolo.numero_protocolo}: {str(e)}")
 
     # Monta resposta
     return {

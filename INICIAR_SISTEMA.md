@@ -140,3 +140,6 @@ docker-compose down -v
 
 **Lembre-se**: O Docker Desktop deve estar rodando antes de executar qualquer comando docker-compose!
 
+
+
+

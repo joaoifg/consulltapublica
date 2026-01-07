@@ -31,7 +31,7 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+asyncpg://cfo_user:cfo_password_change_in_production@db:5432/cfo_consulta?options=-csearch_path%3Dpublic
+      DATABASE_URL: postgresql+asyncpg://cfo_user:cfo_password_change_in_production@db:5432/cfo_consulta
       DATABASE_URL_SYNC: postgresql://cfo_user:cfo_password_change_in_production@db:5432/cfo_consulta?options=-csearch_path%3Dpublic
       SECRET_KEY: ${SECRET_KEY:-change-this-secret-key-in-production-min-32-chars}
       ENCRYPTION_KEY: ${ENCRYPTION_KEY:-change-this-encryption-key-in-production}
